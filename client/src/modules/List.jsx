@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom';
 const List = (props) => (
   <div>
     <ul>
-      <li>Milk</li>
-      <li>Butter</li>
-      <li>Eggs</li>
+      {props.uncategorized.map((item) =>
+        <li>{item}</li>
+      )}
     </ul>
   </div>
 )
