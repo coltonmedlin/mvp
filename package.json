@@ -4,8 +4,7 @@
   "description": "orginizes a gorcery list into aisles",
   "main": "index.js",
   "scripts": {
-    "react-start": "webpack-dev-server --open",
-    "react-build": "webpack serve"
+    "react-start": "webpack serve"
   },
   "repository": {
     "type": "git",
