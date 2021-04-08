@@ -2,3 +2,7 @@ h1 {
   color: black;
   background-color: white;
 }
+
+.completed {
+  text-decoration: line-through;
+}
