@@ -6,3 +6,13 @@ h1 {
 .completed {
   text-decoration: line-through;
 }
+
+.x {
+  color: red;
+  font-size: .5em;
+}
+
+li {
+  list-style-type: none;
+  font-size: 1.5em;
+}

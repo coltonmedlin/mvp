@@ -17,9 +17,13 @@ class List extends React.Component {
     } else {
       let i = this.state.completed.indexOf(index);
       let arr = this.state.completed;
-      delete arr[i];
+      arr.splice(i, 1);
       this.setState({completed: arr});
     }
+  }
+
+  remove(item) {
+    this.props.removeItem(item);
   }
 
   render() {
@@ -27,7 +31,7 @@ class List extends React.Component {
       <div>
         <ul>
           {this.props.uncategorized.map((item, index) =>
-            <li key={index} class={this.state.completed.includes(index) ? 'completed' : ''} onClick={() => {this.markComplete(index)}}>{item}</li>
+            <li key={index}><span className={this.state.completed.includes(index) ? 'completed' : ''} onClick={() => {this.markComplete(index)}}>{item}</span><span className="x" onClick={() => { this.remove(item)}}> &#9747; </ span></li>
           )}
         </ul>
       </div>

@@ -16,7 +16,7 @@ class ItemAdd extends React.Component {
   }
 
   handleSubmit(event) {
-    this.props.itemAdd(this.state.item);
+    this.props.addItem(this.state.item);
     event.preventDefault();
     this.setState({item: ''});
   }

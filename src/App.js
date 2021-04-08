@@ -12,6 +12,7 @@ class App extends React.Component {
       ]
     }
     this.addItem = this.addItem.bind(this);
+    this.removeItem = this.removeItem.bind(this);
   }
 
   addItem (item) {
@@ -20,12 +21,19 @@ class App extends React.Component {
     });
   }
 
+  removeItem (item) {
+    let arr = this.state.uncategorized;
+    let i = arr.indexOf(item);
+    arr.splice(i, 1);
+    this.setState({uncategorized: arr});
+  }
+
 
   render () {
     return (<div>
       <h1>Grocery List Guru</h1>
-      <List uncategorized={this.state.uncategorized}/>
-      <ItemAdd itemAdd={this.addItem}/>
+      <List uncategorized={this.state.uncategorized} removeItem={this.removeItem}/>
+      <ItemAdd addItem={this.addItem} />
     </div>)
   }
 }
