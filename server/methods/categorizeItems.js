@@ -1,14 +1,16 @@
+const axios = require('axios');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/groceryGuru');
 
 const itemsSchema = mongoose.Schema({
   name: String,
   category: String,
-  price: Number
 });
 
 const Items = mongoose.model('Items', itemsSchema);
 
+//utility function for checkForItemsInDb
+// -- handles individual items
 const checkForItemInDb = (item) => {
   return new Promise((resolve, reject) => {
     Items.find({name: item}, (err, result) => {
@@ -22,24 +24,22 @@ const checkForItemInDb = (item) => {
   });
 };
 
-//takes in arry of uncategorized & object of categorized
+//takes in array of uncategorized & object of categorized
 //organizes the found items
 //pushes the non-found items into a notFound array on object
 const checkForItemsInDb = (items, list) => {
   let categorized = list;
-  categorized.prices = [];
   categorized.notFound = [];
   return new Promise((resolve, reject) => {
     items.forEach((item, index, arr) => {
       checkForItemInDb(item)
       .then((res) => {
         if (res) {
-          categorized.prices.push(res.price);
           if (categorized[res.category]) {
              categorized[res.category].push(res.name);
-             return;
+          } else {
+            categorized[res.category] = [res.name];
           }
-          categorized[res.category] = [res.name];
         } else {
           categorized.notFound.push(item);
         }
@@ -55,8 +55,27 @@ const checkForItemsInDb = (items, list) => {
   })
 };
 
-const checkAPI = (item) => {
-
+const checkForItemInAPI = (item) => {
+  item = item.replace(/ /g, '-');
+  return new Promise((resolve, reject) => {
+    axios.get(`https://api.spoonacular.com/food/ingredients/search?apiKey=${process.env.API_KEY}&query=${item}&number=1&metaInformation=true`)
+    .then((result) => {
+      let itemObj = {
+        name: item,
+        category: result.data.results[0].aisle
+      }
+      Items.updateOne({name: item}, itemObj, {upsert: true}, (err, res) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(itemObj);
+        }
+      })
+    })
+    .catch((err) => {
+      reject(err);
+    })
+  })
 };
 
 module.exports.categorizeItems = (items, list) => {
@@ -67,7 +86,12 @@ module.exports.categorizeItems = (items, list) => {
   //check for each item in the db
   checkForItemsInDb(items, categorized)
     .then((organized) => {
-      console.log('organized', organized);
+      return organized;
+    })
+    .then((organized) => {
+      return checkForItemInAPI(organized.notFound[0])
+    }) .then((result) => {
+       console.log('api: ', result);
     })
     .catch((err) => {
       console.log('err', err);

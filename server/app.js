@@ -4,6 +4,7 @@ const port = 3000;
 const categorize = require('./methods/categorizeItems.js');
 const cors = require('cors');
 const bodyParse = require('body-parser');
+require('dotenv').config();
 
 app.use(express.static(__dirname + '/../dist'));
 app.use(bodyParse());
