@@ -11,8 +11,14 @@ app.use(bodyParse());
 app.use(cors());
 
 app.post('/categorize', (req, res) => {
-  let lower = categorize.categorizeItems(req.body.uncategorized, req.body.categorized);
-  res.send(lower);
+  categorize.categorizeItems(req.body.uncategorized, req.body.categorized)
+  .then((result) => {
+    res.send(result);
+  })
+  .catch((err) => {
+    res.status(500);
+    res.send(err);
+  })
 })
 
 app.listen(port, () => {

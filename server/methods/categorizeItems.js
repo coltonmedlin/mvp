@@ -56,21 +56,24 @@ const checkForItemsInDb = (items, list) => {
 };
 
 const checkForItemInAPI = (item) => {
-  item = item.replace(/ /g, '-');
   return new Promise((resolve, reject) => {
     axios.get(`https://api.spoonacular.com/food/ingredients/search?apiKey=${process.env.API_KEY}&query=${item}&number=1&metaInformation=true`)
     .then((result) => {
-      let itemObj = {
-        name: item,
-        category: result.data.results[0].aisle
-      }
-      Items.updateOne({name: item}, itemObj, {upsert: true}, (err, res) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(itemObj);
+      if (result.data.results[0]) {
+        let itemObj = {
+          name: item,
+          category: result.data.results[0].aisle
         }
-      })
+        Items.updateOne({name: item}, itemObj, {upsert: true}, (err, res) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(itemObj);
+          }
+        })
+      } else {
+        resolve(null);
+      }
     })
     .catch((err) => {
       reject(err);
@@ -78,28 +81,52 @@ const checkForItemInAPI = (item) => {
   })
 };
 
-module.exports.categorizeItems = (items, list) => {
-  //create a new list obj
+const checkForItemsInAPI = (items, list) => {
   let categorized = list;
-  //put each item to lower case
+  categorized.notFound = [];
+  return new Promise((resolve, reject) => {
+    items.forEach((item, index, arr) => {
+      checkForItemInAPI(item)
+      .then((res) => {
+        if (res) {
+          if (categorized[res.category]) {
+             categorized[res.category].push(res.name);
+          } else {
+            categorized[res.category] = [res.name];
+          }
+        } else {
+          categorized.notFound.push(item);
+        }
+        if (index === arr.length - 1) {
+          resolve(categorized);
+        }
+      })
+      .catch((err) => {
+        console.log('err: ', err);
+        reject(err);
+      })
+    })
+  })
+}
+
+module.exports.categorizeItems = (items, list) => {
+
+  let categorized = list;
   items = items.map(item => item.toLowerCase());
-  //check for each item in the db
-  checkForItemsInDb(items, categorized)
-    .then((organized) => {
-      return organized;
-    })
-    .then((organized) => {
-      return checkForItemInAPI(organized.notFound[0])
-    }) .then((result) => {
-       console.log('api: ', result);
-    })
-    .catch((err) => {
-      console.log('err', err);
-    })
-    //if it does not exist, check the API
-      //orginize the data
-      //save to the DB
-   //insert into list obj
-   //return list obj
-   return items;
+
+  return new Promise((resolve, reject) => {
+    checkForItemsInDb(items, categorized)
+      .then((organized) => {
+        if (organized.notFound.length > 0) {
+          return checkForItemsInAPI(organized.notFound, organized);
+        } else {
+          return organized;
+        }
+      }) .then((organizedList) => {
+         resolve(organizedList);
+      })
+      .catch((err) => {
+        reject(err);
+      })
+  })
 };
