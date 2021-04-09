@@ -32,6 +32,7 @@ class ItemAdd extends React.Component {
       <div>
         <input value={this.state.item} onChange={this.handleChange} onKeyDown={this.handleEnterKey}/>
         <button onClick={this.handleSubmit}>ADD</button>
+        <button onClick={this.props.categorize}>GURU!</button>
       </div>
     );
   }

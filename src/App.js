@@ -3,43 +3,18 @@ import { hot } from 'react-hot-loader/root';
 import ReactDOM from 'react-dom';
 import List from './components/List.jsx';
 import ItemAdd from './components/ItemAdd.jsx';
+import axios from 'axios';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categorized: {
-        "notFound": [
-            "garlic"
-        ],
-        "Milk, Eggs, Other Dairy": [
-            "butter",
-            "milk",
-            "eggs"
-        ],
-        "Beverages": [
-            "coke",
-            "soda water"
-        ],
-        "Cereal": [
-            "cheerios",
-            "cake mix"
-        ],
-        "Nut butters, Jams, and Honey": [
-            "peanut butter"
-        ],
-        "Produce": [
-            "green onion",
-            "apples"
-        ],
-        "Condiments": [
-            "mayo"
-        ]
-    },
+      categorized: {},
       uncategorized: []
     }
     this.addItem = this.addItem.bind(this);
     this.removeItem = this.removeItem.bind(this);
+    this.categorizeItems = this.categorizeItems.bind(this);
   }
 
   addItem (item) {
@@ -55,12 +30,29 @@ class App extends React.Component {
     this.setState({uncategorized: arr});
   }
 
+  categorizeItems () {
+    axios({
+      method: 'POST',
+      url: 'http://localhost:3000/categorize',
+      data: {
+        uncategorized: this.state.uncategorized,
+        categorized: this.state.categorized
+      }
+    })
+    .then((response) => {
+      let categorized = response.data;
+      let uncategorized = response.data.notFound;
+      delete categorized.notFound;
+      this.setState({categorized, uncategorized})
+    })
+  }
+
 
   render () {
     return (<div>
       <h1>Grocery List Guru</h1>
       <List categorized={this.state.categorized} uncategorized={this.state.uncategorized} removeItem={this.removeItem}/>
-      <ItemAdd addItem={this.addItem} />
+      <ItemAdd addItem={this.addItem} categorize={this.categorizeItems}/>
     </div>)
   }
 }
