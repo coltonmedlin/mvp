@@ -8,8 +8,35 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      uncategorized: [
-      ]
+      categorized: {
+        "notFound": [
+            "garlic"
+        ],
+        "Milk, Eggs, Other Dairy": [
+            "butter",
+            "milk",
+            "eggs"
+        ],
+        "Beverages": [
+            "coke",
+            "soda water"
+        ],
+        "Cereal": [
+            "cheerios",
+            "cake mix"
+        ],
+        "Nut butters, Jams, and Honey": [
+            "peanut butter"
+        ],
+        "Produce": [
+            "green onion",
+            "apples"
+        ],
+        "Condiments": [
+            "mayo"
+        ]
+    },
+      uncategorized: []
     }
     this.addItem = this.addItem.bind(this);
     this.removeItem = this.removeItem.bind(this);
@@ -32,7 +59,7 @@ class App extends React.Component {
   render () {
     return (<div>
       <h1>Grocery List Guru</h1>
-      <List uncategorized={this.state.uncategorized} removeItem={this.removeItem}/>
+      <List categorized={this.state.categorized} uncategorized={this.state.uncategorized} removeItem={this.removeItem}/>
       <ItemAdd addItem={this.addItem} />
     </div>)
   }
