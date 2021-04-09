@@ -7,27 +7,31 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "react-build-dev": "webpack --mode development",
-    "react-build-prod": "webpack --mode production",
-    "react-start": "webpack serve --hot --mode development"
+    "react-start": "webpack --mode development --watch",
+    "server-start": "nodemon server/app.js"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hot-loader": "^4.13.0"
   },
   "devDependencies": {
-    "webpack": "^5.31.0",
-    "webpack-cli": "^4.6.0",
-    "@babel/preset-react": "^7.13.13",
-    "babel-loader": "^8.2.2",
     "@babel/core": "^7.13.15",
     "@babel/preset-env": "^7.13.15",
+    "@babel/preset-react": "^7.13.13",
     "@hot-loader/react-dom": "^17.0.1+4.13.0",
-    "webpack-dev-server": "^3.11.2",
+    "babel-loader": "^8.2.2",
     "css-loader": "^5.2.0",
-    "style-loader": "^2.0.0",
     "eslint": "^7.23.0",
-    "eslint-plugin-react": "^7.23.1"
+    "eslint-plugin-react": "^7.23.1",
+    "nodemon": "^2.0.7",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.31.0",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2"
   }
 }
