@@ -29,7 +29,7 @@ class List extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='list'>
         {Object.keys(this.props.categorized).map((key) => {
           return(
             <div>

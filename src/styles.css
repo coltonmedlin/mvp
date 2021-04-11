@@ -1,6 +1,14 @@
 h1 {
-  color: black;
+  color: rgb(122, 148, 228);
   background-color: white;
+  text-align: center;
+  font-family: 'Dela Gothic One', cursive;
+}
+
+h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: underline;
+  font-size: 1em;
 }
 
 .completed {
@@ -14,5 +22,40 @@ h1 {
 
 li {
   list-style-type: none;
-  font-size: 1.5em;
+  font-size: 1em;
+  margin-top: 5px;
+}
+
+.app {
+  margin: auto;
+  width: 50%;
+}
+
+.list {
+  margin: auto;
+  width: 50%;
+  padding-left: 200px;
+}
+
+.itemAdd {
+  margin: auto;
+  width: 50%;
+  padding-left: 200px;
+}
+
+.add {
+  background-color: slategray;
+  border: none;
+  height: 1.5em;
+  color: white;
+  margin-left: 5px;
+}
+
+.guru {
+  background-color: rgb(122, 148, 228);
+  border: none;
+  height: 1.5em;
+  color: white;
+  margin-left: 5px;
+  border-radius: 5px;
 }

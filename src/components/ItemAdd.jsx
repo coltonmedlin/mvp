@@ -29,10 +29,10 @@ class ItemAdd extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='itemAdd'>
         <input value={this.state.item} onChange={this.handleChange} onKeyDown={this.handleEnterKey}/>
-        <button onClick={this.handleSubmit}>ADD</button>
-        <button onClick={this.props.categorize}>GURU!</button>
+        <button className="add" onClick={this.handleSubmit}>ADD</button>
+        <button className="guru" onClick={this.props.categorize}>GURU!</button>
       </div>
     );
   }

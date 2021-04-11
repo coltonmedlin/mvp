@@ -49,7 +49,7 @@ class App extends React.Component {
 
 
   render () {
-    return (<div>
+    return (<div className='app'>
       <h1>Grocery List Guru</h1>
       <List categorized={this.state.categorized} uncategorized={this.state.uncategorized} removeItem={this.removeItem}/>
       <ItemAdd addItem={this.addItem} categorize={this.categorizeItems}/>
